@@ -55,7 +55,7 @@ in at least 4 of 5 tries.
 
 ---
 
-## 4. Something about your chunks
+## 4. For at least 4 of 5 benchmark test queries, the factual answer accounts for at least 50% of the retrieved chunk's total text, rather than being buried in a multi-paragraph forum thread.
 
 <!-- YOU WRITE THIS ONE.
 
@@ -72,12 +72,12 @@ in at least 4 of 5 tries.
 
 
 **Why this target:**
-
+Most of the questions can be answered in a sentence, and I've noticed that the chunk that gets pulled in from campus_life often 'includes' the answer but it's buried underneath a lot of irrelevant details/opinions.
 
 
 ---
 
-## 5. Your choice
+## 5. When asking the 2 class-based test questions using only the abbreviation and number (e.g., 'BIOL 160'), the pipeline returns the correct factual answer for both queries without generating a hallucination or an 'information not found' refusal."
 
 <!-- YOU WRITE THIS ONE TOO.
 
@@ -90,7 +90,7 @@ in at least 4 of 5 tries.
 
 
 **Why this target:**
-
+There is a lot of documents labeled in this format 'BIOL 160', it would be interesting to see if stating level + class is enough for the pipeline to retrieve relevant chunks or if it is unconfident to answer and needs a full class name ie: 'ECON 101 Introduction to Economics'.
 
 
 ---
