@@ -80,7 +80,7 @@ def fallback_split(
     return chunks
 
 
-def split_documents(documents: list[Document]) -> list[Chunk]:
+def split_documents(documents: list[Document], max_chunk_size: int = 800) -> list[Chunk]:
     """
     Split documents into chunks. ⚠️ REPLACE THE BODY OF THIS IN MILESTONE 3.
 
@@ -96,8 +96,68 @@ def split_documents(documents: list[Document]) -> list[Chunk]:
       - Is the useful information in one sentence, or spread over a paragraph?
       - Would splitting on paragraph breaks keep more thoughts intact than
         splitting on a character count?
+
+
+
     """
-    return fallback_split(documents)
+    chunks: list [Chunk] = []
+
+    for doc in documents: 
+        text = doc.text.strip()  
+        if not text: 
+            continue
+
+        if len(text) <= max_chunk_size: 
+            chunks.append(
+                Chunk(
+                    text=text, 
+                    source=doc.source, 
+                    index=0, 
+                    produced_by="chunker.py::split_documents",
+                )
+            ) 
+            continue
+        paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+        
+        current_chunk_parts: list[str] = []
+        current_length = 0
+        chunk_index = 0
+
+        for para in paragraphs:
+            para_len = len(para)
+            # If adding this paragraph exceeds the ceiling, save current chunk
+            if current_chunk_parts and (current_length + para_len + 2 > max_chunk_size):
+                chunk_text = "\n\n".join(current_chunk_parts)
+                chunks.append(
+                    Chunk(
+                        text=chunk_text,
+                        source=doc.source,
+                        index=chunk_index,
+                        produced_by="chunker.py::split_documents",
+                    )
+                )
+                chunk_index += 1
+                current_chunk_parts = []
+                current_length = 0
+
+            current_chunk_parts.append(para)
+            current_length += para_len + 2
+
+        # Flush any remaining text as the final chunk
+        if current_chunk_parts:
+            chunk_text = "\n\n".join(current_chunk_parts)
+            chunks.append(
+                Chunk(
+                    text=chunk_text,
+                    source=doc.source,
+                    index=chunk_index,
+                    produced_by="chunker.py::split_documents",
+                )
+            )
+
+    return chunks
+
+
 
 
 def describe(chunks: list[Chunk]) -> str:
