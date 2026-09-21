@@ -1,6 +1,6 @@
-# The Unofficial Guide
+# Campus Life
 
-<!-- Replace this line with your name and which corpus you picked. -->
+<!-- Replace this line with your name and which corpus you picked. 
 
 > **This file is your submission.** Fill it in as you go — most sections get
 > written during the milestone that produces them, not at the end.
@@ -11,11 +11,10 @@
 > **Paste everything as text.** No screenshots, no video. A typed table gets
 > full credit; a picture of the same table gets none.
 >
-> Delete these instruction blocks as you replace them. The `<!-- -->` comments
+> Delete these instruction blocks as you replace them. The comments
 > are notes to you and don't show up when the page renders — you can leave them
 > or remove them.
-
----
+-->
 
 # Unit 1
 
@@ -26,6 +25,10 @@
      this repo.
 
      Milestone 5. -->
+
+     This is a RAG project built for an imaginary campus. The RAG answers questions that are specific to this imaginary school based only off the documents 
+     in campus_life corpus. Every answer is grounded in real documents if the LLM gets a question that is completely irrelevant to campus/uni life, it refuses to answer. 
+     If there is a question that is related to campus life but the RAG pipeline cannot confidently answer the question it says so instead of hallucinating information that is not strictly in the corpus. (well thats the goal... we'll see if the RAG hallucinates)
 
 ## Chunking Strategy
 
@@ -118,10 +121,19 @@ Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building
      visible. Milestone 4. -->
 
 **Question:**
-
+     What do students say the average wait times is at Halden Hall?
 **Answer:**
 
 ```
+(best distance 0.2475, cutoff 0.6)
+
+Students say the wait time at Halden Hall is rarely more than 8 minutes, even at noon.
+
+Sources: `dining_halden_hall.txt` and `dining_halden_hall_followup.txt`
+
+Sources retrieved: dining_halden_hall.txt, dining_halden_hall_followup.txt, dining_kestrel_commons_followup.txt, dining_pellew_dining_hall_followup.txt, dining_the_ridgeway_cafe_followup.txt
+
+1 model calls this session, 738 tokens (689 in, 49 out)
 ```
 
 **My relevance cutoff:**
@@ -137,7 +149,17 @@ Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| What do students say the average wait times is at Halden Hall? | Yes | 0.2475 |
+| How many hours outside of class do students say you should expect to put into STAT 150? | Yes |0.2785 |
+| When is the earliest I can book a group study room? | Yes |0.2799 |
+| Does BIOL 160 have a curve?| Yes | 0.3996|
+| How much can I print per semester?| Yes | 0.2875 |
+| What is the capital of Mongolia? | No | 0.825 |
+| How do I change the oil in a diesel engine? | No | 0.934 |
+| Who won the 1994 World Cup? | No | 0.886 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.844 |
+| How do I write a for loop in Rust? | No | 0.896 |
+
 
 ## How I Used AI
 
@@ -150,9 +172,10 @@ Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building
 
      Milestone 5. -->
 
-**1.**
+**1.** I used AI to help me decide what my ceiling for a cutoff of a chunk should be. I kept the documents in tact since they were short, ~340 characters and contained opinion based sentences sometimes. But in the case a document had multiple paragraphs, it would split around ~800 characters and only at the start of a paragraph. I specifically asked "After how many characters should I split a document into seperate chunks; and min chars: _ avg_chars: _ max_chars: " It reasoned well and explained that 800 should be the ceiling because that's when you'd have two strong complete thoughts, and splitting prematurely would create an arbituary sentence, which would be a problem since some of the documents contain opinion based sentences that can easily apply to other campus life topics "The one piece of advice: the essay rubric is posted in week 2 and it's followed exactly — read it early." 
 
-**2.**
+
+**2.** I used AI to help me understand the instructions in milestone 4, I did not change any of the top_k or threshold values in config.py, however I did not understand that I had to fill out the table with the questions in scope and out of scope. I read over the instruction multiple times but just did not understand that I was supposed to copy paste and create cells in the readme for question | in corpus? | best distance. 
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
