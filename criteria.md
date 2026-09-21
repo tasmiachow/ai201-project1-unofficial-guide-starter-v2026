@@ -27,7 +27,7 @@ contains the answer.
      I expect that one to be hard." -->
 
 ---
-
+One of my questions is about a topic only two documents mention, so I expect that one to be hard.
 ## 2. Every answer names a source
 
 Every answer the system produces names at least one source document.
@@ -37,6 +37,7 @@ Every answer the system produces names at least one source document.
      or what would have to go wrong for it not to be? -->
 
 ---
+It is important for every answer to be grounded. Otherwise it would be dangerous and giving wrong information confidently. 
 
 ## 3. The relevance gate stops out-of-corpus questions
 
@@ -52,8 +53,9 @@ in at least 4 of 5 tries.
 **Why this target:**
 <!-- What did your distances look like when you set the cutoff in Milestone 4?
      Was there a clean gap, or did the two groups overlap? -->
-
+Theres a strong threshold around 0.5, with questions in scope below and questions out of scope well over that distance.
 ---
+
 
 ## 4. For at least 4 of 5 benchmark test queries, the factual answer accounts for at least 50% of the retrieved chunk's total text, rather than being buried in a multi-paragraph forum thread.
 

@@ -1,4 +1,4 @@
-# Campus Life
+# Tasmia Chowdhury - Campus Life
 
 <!-- Replace this line with your name and which corpus you picked. 
 
@@ -136,8 +136,6 @@ Sources retrieved: dining_halden_hall.txt, dining_halden_hall_followup.txt, dini
 1 model calls this session, 738 tokens (689 in, 49 out)
 ```
 
-**My relevance cutoff:**
-
 <!-- The number you set in config.py, and how you got there.
 
      You ran five questions your corpus covers and the five in OUT_OF_SCOPE
@@ -146,6 +144,13 @@ Sources retrieved: dining_halden_hall.txt, dining_halden_hall_followup.txt, dini
      here — the table below wants all ten rows.
 
      Milestone 4. -->
+**My relevance cutoff:** `0.60`
+
+To set the cutoff, I measured the best retrieval distance across five in-scope questions and five out-of-scope questions:
+* **In-scope distances:** Ranged from `0.2475` to `0.3996` (mean ~0.298).
+* **Out-of-scope distances:** Ranged from `0.825` to `0.934` (mean ~0.877).
+
+There is a clean, distinct gap of over 0.42 between my highest in-corpus distance (`0.3996` for BIOL 160) and my lowest out-of-scope distance (`0.825` for the capital of Mongolia). I retained the default threshold of `0.60` in `config.py` because it sits comfortably in the middle of this gap (~0.40 to ~0.82), safely gating out completely irrelevant queries while ensuring valid campus questions are never rejected.
 
 | Question | In corpus? | Best distance |
 |---|---|---|
@@ -175,7 +180,7 @@ Sources retrieved: dining_halden_hall.txt, dining_halden_hall_followup.txt, dini
 **1.** I used AI to help me decide what my ceiling for a cutoff of a chunk should be. I kept the documents in tact since they were short, ~340 characters and contained opinion based sentences sometimes. But in the case a document had multiple paragraphs, it would split around ~800 characters and only at the start of a paragraph. I specifically asked "After how many characters should I split a document into seperate chunks; and min chars: _ avg_chars: _ max_chars: " It reasoned well and explained that 800 should be the ceiling because that's when you'd have two strong complete thoughts, and splitting prematurely would create an arbituary sentence, which would be a problem since some of the documents contain opinion based sentences that can easily apply to other campus life topics "The one piece of advice: the essay rubric is posted in week 2 and it's followed exactly — read it early." 
 
 
-**2.** I used AI to help me understand the instructions in milestone 4, I did not change any of the top_k or threshold values in config.py, however I did not understand that I had to fill out the table with the questions in scope and out of scope. I read over the instruction multiple times but just did not understand that I was supposed to copy paste and create cells in the readme for question | in corpus? | best distance. 
+**2.** I asked AI to generate the Markdown table and calculate the separation gap between my in-scope and out-of-scope retrieval distances. It provided a table along with a recommendation to aggressively lower `THRESHOLD` to `0.45` to be conservative. However, I rejected lowering it that far because my BIOL 160 question had a distance of `0.3996`—a cutoff of `0.45` left too thin a safety margin for slight variations in student phrasing. Instead, I kept the cutoff at `0.60`, which sits at the true midpoint of the gap and prevents false refusals.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
