@@ -209,11 +209,11 @@ There is a clean, distinct gap of over 0.42 between my highest in-corpus distanc
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
-| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
-| 3. Gate stops out-of-corpus questions | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
-| 4. For at least 4 of 5 benchmark test queries, the factual answer accounts for at least 50% of the retrieved chunk's total text, rather than being buried in a multi-paragraph forum thread. | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
-| 5. When asking the 2 class-based test questions using only the abbreviation and number (e.g., 'BIOL 160'), the pipeline returns the correct factual answer for both queries without generating a hallucination or an 'information not found' refusal. | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 1. Retrieved chunk contains the answer | 5 of 5 | 0/5 | 0/5 | 0/5 | MISSED |
+| 2. Every answer names a source | 5 of 5 | 0/5 | 0/5 | 0/5 | MISSED |
+| 3. Gate stops out-of-corpus questions | 5 of 5 |  0/5 |  0/5 |  0/5 | MISSED |
+| 4. For at least 4 of 5 benchmark test queries, the factual answer accounts for at least 50% of the retrieved chunk's total text, rather than being buried in a multi-paragraph forum thread. | 5 of 5 |0/5  | 0/5  | 0/5  | MISSED |
+| 5. When asking the 2 class-based test questions using only the abbreviation and number (e.g., 'BIOL 160'), the pipeline returns the correct factual answer for both queries without generating a hallucination or an 'information not found' refusal. | 5 of 5 | 0/5  | 0/5  | 0/5 | MISSED |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
@@ -267,6 +267,19 @@ Produced by: Chunker.py and def split_documents
      low, and which one you'd tighten and to what.
 
      Milestone 3. -->
+For questions.py my expects was completely broken and unable to evaluate the RAG because I had paraphrased the correct answer and added unnessary words to what was actually crucial to the answer.
+     Before: 
+     {"question": "What do students say the average wait times is at Halden Hall?", "expects": "They are relatively short/non-existent the wait is about 8 minutes or less."},
+    {"question": "How many hours outside of class do students say you should expect to put into STAT 150?", "expects": "Students agree that 5-6 hours are needed weekly for stat 150 outside of class."},
+    {"question": "When is the earliest I can book a group study room?", "expects": "Rooms book two weeks ahead through the library site."},
+    {"question": "Does BIOL 160 have a curve?", "expects": "No."},
+    {"question": "How much can I print per semester?", "expects": "Every student gets $30 of printing per semester, which is roughly 600 black-and-white pages."},
+    After: 
+     {"question": "What do students say the average wait times is at Halden Hall?", "expects": "8 minutes"},
+    {"question": "How many hours outside of class do students say you should expect to put into STAT 150?", "expects": "5 to 6 hours a week"},
+    {"question": "When is the earliest I can book a group study room?", "expects": "two weeks ahead"},
+    {"question": "Does BIOL 160 have a curve?", "expects": "No"},
+    {"question": "How much can I print per semester?", "expects": "$30 of printing per semester"},
 
 ## The Improvement
 
@@ -311,7 +324,7 @@ My RAG pipeline was good, the generate and chunker worked effectively against my
 
      Milestone 5. -->
 
-     N/A. The "broken" part was me writing in full sentences in "expects": "", which made it difficult to actually test and evaluate the RAG. Instead of a full pharaprased sentence. I had to rewrite "expects" I changed it to short metrics that the ANSWER must have. I also made sure if it was a number it was written EXACTLY as it was in the documents. ie: "8 minutes" vs "eight minutes"
+     N/A. The "broken" part was me writing in full sentences in "expects": "", which made it difficult to actually test and evaluate the RAG. Instead of a full pharaprased sentence. I had to rewrite "expects" I changed it to short metrics that the ANSWER must have. I also made sure if it was a number it was written EXACTLY as it was in the documents. ie: "8 minutes" vs "eight minutes". Furthermore, the logs with the "failed" tests, the answer produced has not changed after I changed expects, and still contains the correct chunk all thoughout my 'failing' test cases. 
 
 ## What I'd Do Differently
 
