@@ -268,18 +268,18 @@ Produced by: Chunker.py and def split_documents
 
      Milestone 3. -->
 For questions.py my expects was completely broken and unable to evaluate the RAG because I had paraphrased the correct answer and added unnessary words to what was actually crucial to the answer.
-     Before: 
-     {"question": "What do students say the average wait times is at Halden Hall?", "expects": "They are relatively short/non-existent the wait is about 8 minutes or less."},
+### Before: 
+     [{"question": "What do students say the average wait times is at Halden Hall?", "expects": "They are relatively short/non-existent the wait is about 8 minutes or less."},
     {"question": "How many hours outside of class do students say you should expect to put into STAT 150?", "expects": "Students agree that 5-6 hours are needed weekly for stat 150 outside of class."},
     {"question": "When is the earliest I can book a group study room?", "expects": "Rooms book two weeks ahead through the library site."},
     {"question": "Does BIOL 160 have a curve?", "expects": "No."},
-    {"question": "How much can I print per semester?", "expects": "Every student gets $30 of printing per semester, which is roughly 600 black-and-white pages."},
-    After: 
-     {"question": "What do students say the average wait times is at Halden Hall?", "expects": "8 minutes"},
+    {"question": "How much can I print per semester?", "expects": "Every student gets $30 of printing per semester, which is roughly 600 black-and-white pages."}]
+### After: 
+     [{"question": "What do students say the average wait times is at Halden Hall?", "expects": "8 minutes"},
     {"question": "How many hours outside of class do students say you should expect to put into STAT 150?", "expects": "5 to 6 hours a week"},
     {"question": "When is the earliest I can book a group study room?", "expects": "two weeks ahead"},
     {"question": "Does BIOL 160 have a curve?", "expects": "No"},
-    {"question": "How much can I print per semester?", "expects": "$30 of printing per semester"},
+    {"question": "How much can I print per semester?", "expects": "$30 of printing per semester"}]
 
 ## The Improvement
 
