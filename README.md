@@ -224,7 +224,7 @@ There is a clean, distinct gap of over 0.42 between my highest in-corpus distanc
 - Best distance: 0.3996 (passed the gate)
 - Sources retrieved: course_biol_160.txt, course_biol_160_exams.txt, course_cs_210_exams.txt, course_engl_205_exams.txt, course_phys_130_exams.txt
 
-```
+
 No, BIOL 160 is not curved (source: `course_biol_160.txt` and `course_biol_160_exams.txt`).
 
 Produced by: Chunker.py and def split_documents
