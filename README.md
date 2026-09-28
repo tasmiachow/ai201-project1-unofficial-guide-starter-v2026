@@ -209,15 +209,25 @@ There is a clean, distinct gap of over 0.42 between my highest in-corpus distanc
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. For at least 4 of 5 benchmark test queries, the factual answer accounts for at least 50% of the retrieved chunk's total text, rather than being buried in a multi-paragraph forum thread. | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. When asking the 2 class-based test questions using only the abbreviation and number (e.g., 'BIOL 160'), the pipeline returns the correct factual answer for both queries without generating a hallucination or an 'information not found' refusal. | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
      Name the file and function that produced it. -->
+
+## Does BIOL 160 have a curve? — run 1
+
+- Best distance: 0.3996 (passed the gate)
+- Sources retrieved: course_biol_160.txt, course_biol_160_exams.txt, course_cs_210_exams.txt, course_engl_205_exams.txt, course_phys_130_exams.txt
+
+```
+No, BIOL 160 is not curved (source: `course_biol_160.txt` and `course_biol_160_exams.txt`).
+
+Produced by: Chunker.py and def split_documents
 
 ## Verdicts
 
@@ -232,11 +242,11 @@ There is a clean, distinct gap of over 0.42 between my highest in-corpus distanc
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunk contains the answer | MET | For every question the retrieved chunk contains the answser. I verified by fact checking the answer with the documents in the corpus. |
+| 2 | Every answer names a source | MET | Every answer names the source file at the end. |
+| 3 | Gate stops out-of-corpus questions | MET | Yes for out-of-corpus question, cutoff 0.6 and it refused 5 of 5. |
+| 4 | For at least 4 of 5 benchmark test queries, the factual answer accounts for at least 50% of the retrieved chunk's total text, rather than being buried in a multi-paragraph forum thread. | MET | YES, instead of writing all the forums on Halden Hall, the retrieved text is only a minimal sentence that fully answers the users questions about wait times vs. also answering about best food, transport, etc. |
+| 5 | When asking the 2 class-based test questions using only the abbreviation and number (e.g., 'BIOL 160'), the pipeline returns the correct factual answer for both queries without generating a hallucination or an 'information not found' refusal." | MET | The RAG answers the questions correctly on BIOL 160 and STAT 150 without refusing. |
 
 ## Diagnoses
 
@@ -260,9 +270,9 @@ There is a clean, distinct gap of over 0.42 between my highest in-corpus distanc
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** The "broken" part was me writing in full sentences in "expects": "", which made it difficult to actually test and evaluate the RAG. For example, I wrote full pharaphrased sentences in  "expects": "They are relatively short/non-existent the wait is about 8 minutes or less.", instead of making sure expect had the right chunk. "expects": "8 minutes"
 
-**Why I picked it:**
+**Why I picked it:**  In order to still thoroughly evaluate the RAG, I picked the most relevant and crucial parts the answer must contain and put that in expects. I also made sure, if the specific document wrote "8 minutes" instead of "eight minutes", I made sure I put the exact grammar the documents in the corpus used.
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
@@ -274,13 +284,15 @@ There is a clean, distinct gap of over 0.42 between my highest in-corpus distanc
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. For at least 4 of 5 benchmark test queries, the factual answer accounts for at least 50% of the retrieved chunk's total text, rather than being buried in a multi-paragraph forum thread. | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. When asking the 2 class-based test questions using only the abbreviation and number (e.g., 'BIOL 160'), the pipeline returns the correct factual answer for both queries without generating a hallucination or an 'information not found' refusal. | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
 
 **Did it help?**
+Yes, I was able to actually test and evaluate my RAG. It passed as soon as I fixed the expected outputs to only contain crucial words for the answer instead of filler words. 
+My RAG pipeline was good, the generate and chunker worked effectively against my criteria. I made sure one of my criteria evaluted to make sure the answer wasn't burried in a forum, and the factual answer accounts for at least 50% of the retrieved chunk's total text,
 
 <!-- Say plainly whether it did, and how you know. If it made things worse,
      say that — a change that backfired, honestly reported, earns full credit
@@ -299,9 +311,12 @@ There is a clean, distinct gap of over 0.42 between my highest in-corpus distanc
 
      Milestone 5. -->
 
+     N/A. The "broken" part was me writing in full sentences in "expects": "", which made it difficult to actually test and evaluate the RAG. Instead of a full pharaprased sentence. I had to rewrite "expects" I changed it to short metrics that the ANSWER must have. I also made sure if it was a number it was written EXACTLY as it was in the documents. ie: "8 minutes" vs "eight minutes"
+
 ## What I'd Do Differently
 
 <!-- Knowing what you know now — which of your five criteria would you write
      differently, and why?
 
      Milestone 5. -->
+     I believe all of my criteria were acheivable and measurable for this specific corpus. I wouldn't change the criteria because it simulates how a student might actually interact with this RAG. For example, instead of writing the entire course name they will most likely ask class abbreivations. ie: "In BIOL 160 .." My main goal was making sure that the RAG would still answer to those questions without getting lost and submitting multiple documents were the answer was burried. 
